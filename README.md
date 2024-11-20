@@ -1,2 +1,2 @@
-#TAQUIN RESOLVER
-Here is a taquin resolver made in python, using DFS, BFS and A* algorithm
+# TAQUIN SOLVER
+A taquin solver made in python, using DFS, BFS and A* algorithm
