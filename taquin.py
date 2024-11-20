@@ -1,15 +1,14 @@
 import sys
 import random
 from collections import deque
-from tkinter import *
+import tkinter
 import time
 
 class Taquin :
     directions=[(-1,0),(1,0),(0,-1),(0,1)]
 
-    def __init__(self,k,algorithme):
+    def __init__(self,k):
         self.solution=tuple([(j + 1) % (k * k) for j in range(k*k)])
-        print(self.solution)
         self.len=k
         self.tableau=[]
         resolvable=False
@@ -17,10 +16,6 @@ class Taquin :
             self.generate()
             resolvable=self.solvable()
         self.tableau=tuple(self.tableau)
-        if self.final(self.tableau):
-            print("Déjà final")
-            return True
-        print(self.tableau)
 
 
 
@@ -44,13 +39,11 @@ class Taquin :
                         copytableau[j],copytableau[i]=copytableau[i],copytableau[j]
                         swap+=1
                         break
-        print(swap)
         return True if swap%2==0 else False
 
     def final(self,state):
-        if (state==self.solution):
-            return True
-        return False
+        return state==self.solution
+
 
     def generate_next_states(self,state):
         current_state=list(state)
@@ -72,7 +65,7 @@ class Taquin :
 
         return next_states
 
-def BFS(taquin):
+def bfs(taquin):
     queue=deque([(taquin.tableau,None)])
     visited=set([taquin.tableau])
     parent_dict={taquin.tableau:None}
@@ -92,7 +85,7 @@ def BFS(taquin):
                 parent_dict[state]=current_state
                 queue.append((state,current_state))
 
-def DFS(taquin):
+def dfs(taquin):
     stack=[(taquin.tableau,None)]
     visited=set([taquin.tableau])
     parent_dict={taquin.tableau:None}
@@ -114,18 +107,15 @@ def DFS(taquin):
                 stack.append((state,current_state))
 
 
-test=0
-for i in range(1000):
-    e=Taquin(3,3)
-    if BFS(e) != None :
-        test+=1
+def test(algorithme,k):
+    for _ in range(1000):
+        taquin=Taquin(k)
+        if algorithme(taquin) is None :
+            return False
 
-print(True if test == 1000 else False)
+
+
+
+print(test(bfs,3))
 print("--------------------------------------------------------------")
-test=0
-for i in range(1000):
-    e=Taquin(3,3)
-    if DFS(e) != None :
-        test+=1
-
-print(True if test == 1000 else False)
+print(test(dfs,3))
