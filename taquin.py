@@ -1,8 +1,9 @@
 import sys
 import random
 import tkinter
-import algorithm
 import time
+import algorithm
+
 
 class Taquin :
     directions=[(-1,0),(1,0),(0,-1),(0,1)]
@@ -66,20 +67,24 @@ class Taquin :
         return next_states
 
 
-def test(algorithme,k,n):
-    for _ in range(n):
-        taquin=Taquin(k)
-        if algorithme(taquin) is None :
-            return False
-    return True
+def test(algorithme,k):
+    taquin=Taquin(k)
+    start_time = time.time()
+    solution=algorithme(taquin)
+    end_time=time.time()
+    elapsed_time=end_time-start_time
 
+    if solution:
+        print("Path found in",len(solution)-1,"steps:")
+        for step in solution:
+            print(step)
 
+    print(f"Time taken to solve : {elapsed_time:.4f} seconds")
+    return elapsed_time
 
+avg_time=0
 
-#print("--------------------------------------------------------------")
-#print(test(algorithm.bfs,3,10))
-#print("--------------------------------------------------------------")
-#print(test(algorithm.dfs,3,10))
-a=Taquin(3)
-print(algorithm.a_star(a))
-
+for _ in range(100):
+    avg_time+=test(algorithm.a_star,4)
+avg_time=avg_time/100
+print(f"Average elapsed time to solve : {avg_time:.4f} seconds")

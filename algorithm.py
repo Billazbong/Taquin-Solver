@@ -20,6 +20,7 @@ def bfs(taquin):
                 visited.add(state)
                 parent_dict[state]=current_state
                 queue.append((state,current_state))
+    return None
 
 def dfs(taquin):
     stack=[(taquin.tableau,None)]
@@ -41,13 +42,14 @@ def dfs(taquin):
                 visited.add(state)
                 parent_dict[state]=current_state
                 stack.append((state,current_state))
+    return None
 
 def manhattan_distance(state,k):
     """Calculate the sum of all manhattan distances"""
     distance=0
     for i in range(k):
         for j in range(k):
-            value=state[i*k+j-1]
+            value=state[i*k+j]
             if value!=0:
                 goal_x,goal_y=divmod(value-1,k)
                 distance+= abs(i-goal_x)+abs(j-goal_y)
@@ -75,6 +77,4 @@ def a_star(taquin):
                 visited.add(state)
                 parent_dict[state]=current_state
                 heapq.heappush(priority_queue,(new_f,state,new_g,current_state))
-
-
-
+    return None
