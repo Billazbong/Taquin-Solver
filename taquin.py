@@ -1,9 +1,10 @@
 import sys
+import os
 import random
 import tkinter
 import time
 import algorithm
-
+import multiprocessing
 
 class Taquin :
     directions=[(-1,0),(1,0),(0,-1),(0,1)]
@@ -66,25 +67,37 @@ class Taquin :
 
         return next_states
 
+def test(algorithme,k,n,result):
+    total_time=0
+    for _ in range(n):
+        taquin=Taquin(k)
+        start_time = time.time()
+        algorithme(taquin)
+        end_time=time.time()
+        elapsed_time=end_time-start_time
+        total_time+=elapsed_time
+    result.append(total_time)
+    
 
-def test(algorithme,k):
-    taquin=Taquin(k)
-    start_time = time.time()
-    solution=algorithme(taquin)
-    end_time=time.time()
-    elapsed_time=end_time-start_time
+def run_multiprocess():
+    manager=multiprocessing.Manager()
+    result=manager.list()
+    processes=[]
+    portion,rest=divmod(n,n_threads)
+    for i in range(n_threads):
+        portion_to_use=portion+rest if i == 0 else portion
+        p=multiprocessing.Process(target=test,args=(algorithm.a_star,3,portion_to_use,result))
+        p.start()
+        processes.append(p)
+    for p in processes:
+        p.join()
+    total_time = sum(result)
+    avg_time = total_time / float(n)
+    print(f"Average elapsed time to solve: {avg_time:.6f} seconds")
 
-    if solution:
-        print("Path found in",len(solution)-1,"steps:")
-        for step in solution:
-            print(step)
+if __name__=="__main__":
+    print("Combien d'essais?")
+    n=int(input())
+    n_threads=int(os.cpu_count()/2)
+    run_multiprocess()
 
-    print(f"Time taken to solve : {elapsed_time:.4f} seconds")
-    return elapsed_time
-
-avg_time=0
-
-for _ in range(100):
-    avg_time+=test(algorithm.a_star,4)
-avg_time=avg_time/100
-print(f"Average elapsed time to solve : {avg_time:.4f} seconds")
