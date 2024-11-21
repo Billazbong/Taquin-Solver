@@ -12,10 +12,10 @@ class Taquin :
         self.solution=tuple([(j + 1) % (k * k) for j in range(k*k)])
         self.k=k
         self.tableau=[]
-        resolvable=False
-        while not resolvable:
+        solvable=False
+        while not solvable:
             self.generate()
-            resolvable=self.solvable()
+            solvable=self.solvable()
         self.tableau=tuple(self.tableau)
 
 
