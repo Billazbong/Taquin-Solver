@@ -113,6 +113,9 @@ if __name__=="__main__":
         print("5. DFS (NO LOOP)")
         chosen_algo=algorithm.convert_input_to_algo(int(input()))
 
-    n_threads=int(os.cpu_count()/3)
-    run_multiprocess()
+    if n>1:
+        n_threads=int(os.cpu_count()/3)
+        run_multiprocess()
+    else:
+        print(chosen_algo(Taquin(k)))
 
