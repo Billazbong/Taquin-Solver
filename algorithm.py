@@ -1,7 +1,27 @@
 from collections import deque
 import heapq
+from enum import Enum
 
 def bfs(taquin):
+    """Naive implementation of bfs to solve taquin"""
+    queue=deque([(taquin.tableau,None)])
+    parent_dict={taquin.tableau:None}
+    while queue:
+        current_state,parent_state=queue.popleft()
+        if taquin.final(current_state):
+            path=[current_state]
+            while parent_state is not None:
+                path.append(parent_state)
+                parent_state=parent_dict[parent_state]
+            path.reverse()
+            return path
+        for state in taquin.generate_next_states(current_state):
+            parent_dict[state]=current_state
+            queue.append((state,current_state))
+    return None
+
+def bfs_no_loop(taquin):
+    """Implementation of bfs that prevents loop from happening"""
     queue=deque([(taquin.tableau,None)])
     visited=set([taquin.tableau])
     parent_dict={taquin.tableau:None}
@@ -14,7 +34,6 @@ def bfs(taquin):
                 parent_state=parent_dict[parent_state]
             path.reverse()
             return path
-
         for state in taquin.generate_next_states(current_state):
             if state not in visited:
                 visited.add(state)
@@ -23,6 +42,25 @@ def bfs(taquin):
     return None
 
 def dfs(taquin):
+    """Naive implementation of dfs"""
+    stack=[(taquin.tableau,None)]
+    parent_dict={taquin.tableau:None}
+    while stack:
+        current_state,parent_state=stack.pop()
+        if taquin.final(current_state):
+            path=[current_state]
+            while parent_state is not None:
+                path.append(parent_state)
+                parent_state=parent_dict[parent_state]
+            path.reverse()
+            return path
+        for state in taquin.generate_next_states(current_state):
+            parent_dict[state]=current_state
+            stack.append((state,current_state))
+    return None
+
+def dfs_no_loop(taquin):
+    """Implementation of dfs that prevents loop from happening"""
     stack=[(taquin.tableau,None)]
     visited=set([taquin.tableau])
     parent_dict={taquin.tableau:None}
@@ -35,8 +73,6 @@ def dfs(taquin):
                 parent_state=parent_dict[parent_state]
             path.reverse()
             return path
-
-
         for state in taquin.generate_next_states(current_state):
             if state not in visited:
                 visited.add(state)
@@ -78,3 +114,25 @@ def a_star(taquin):
                 parent_dict[state]=current_state
                 heapq.heappush(priority_queue,(new_f,state,new_g,current_state))
     return None
+
+class Algorithm(Enum):
+    BFS=1
+    DFS=2
+    A_STAR=3
+    BFS_NO_LOOP=4
+    DFS_NO_LOOP=5
+
+algo_mapping={
+    Algorithm.BFS:bfs,
+    Algorithm.DFS:dfs,
+    Algorithm.A_STAR:a_star,
+    Algorithm.BFS_NO_LOOP:bfs_no_loop,
+    Algorithm.DFS_NO_LOOP:dfs_no_loop
+}
+
+def convert_input_to_algo(algo_number):
+    try:
+        algo=Algorithm(algo_number)
+        return algo_mapping[algo]
+    except (ValueError,KeyError):
+        return None

@@ -86,7 +86,7 @@ def run_multiprocess():
     portion,rest=divmod(n,n_threads)
     for i in range(n_threads):
         portion_to_use=portion+rest if i == 0 else portion
-        p=multiprocessing.Process(target=test,args=(algorithm.a_star,3,portion_to_use,result))
+        p=multiprocessing.Process(target=test,args=(chosen_algo,k,portion_to_use,result))
         p.start()
         processes.append(p)
     for p in processes:
@@ -95,9 +95,24 @@ def run_multiprocess():
     avg_time = total_time / float(n)
     print(f"Average elapsed time to solve: {avg_time:.6f} seconds")
 
+
+
+
 if __name__=="__main__":
-    print("Combien d'essais?")
+    print("How many tries?")
     n=int(input())
-    n_threads=int(os.cpu_count()/2)
+    print("Which size?")
+    k=int(input())
+    chosen_algo=None
+    while chosen_algo is None:
+        print("Which algorithm : ")
+        print("1. BFS")
+        print("2. DFS")
+        print("3. A*")
+        print("4. BFS (NO LOOP)")
+        print("5. DFS (NO LOOP)")
+        chosen_algo=algorithm.convert_input_to_algo(int(input()))
+
+    n_threads=int(os.cpu_count()/3)
     run_multiprocess()
 
