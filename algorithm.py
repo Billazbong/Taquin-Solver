@@ -92,7 +92,7 @@ def manhattan_distance(state,k):
     return distance
 
 def a_star(taquin):
-    """Implement A* algorithm to solve taquin"""
+    """Implementation of A* algorithm to solve taquin"""
     priority_queue=[]
     heapq.heappush(priority_queue,(0,taquin.tableau,0,None)) #f(n), state, g(n), parent_state
     visited=set([taquin.tableau])
