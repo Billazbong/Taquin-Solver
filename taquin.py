@@ -22,6 +22,7 @@ class Taquin :
 
 
     def generate(self):
+        """Generate a taquin"""
         self.tableau=[0 for _ in range(self.k*self.k)]
         for i in range (self.k*self.k):
             done=0
@@ -32,6 +33,7 @@ class Taquin :
                     done=1
 
     def solvable(self):
+        """Check if the taquin is solvable or not"""
         swap=0
         copytableau=[x for x in self.tableau if x != 0]
         for i in range(self.k*self.k-1):
@@ -44,10 +46,12 @@ class Taquin :
         return True if swap%2==0 else False
 
     def final(self,state):
+        """Check if the taquin is solved"""
         return state==self.solution
 
 
     def generate_next_states(self,state):
+        """Generate the next possible states"""
         current_state=list(state)
         next_states=[]
         empty_pos=(0,0)
@@ -67,12 +71,13 @@ class Taquin :
 
         return next_states
 
-def test(algorithme,k,n,result):
+def test(algorithm,k,n,result):
+    """Start n test of k*k taquin using algorithm"""
     total_time=0
     for _ in range(n):
         taquin=Taquin(k)
         start_time = time.time()
-        algorithme(taquin)
+        algorithm(taquin)
         end_time=time.time()
         elapsed_time=end_time-start_time
         total_time+=elapsed_time
@@ -80,6 +85,7 @@ def test(algorithme,k,n,result):
     
 
 def run_multiprocess():
+    """Run multiple processes to solve multiple taquin"""
     manager=multiprocessing.Manager()
     result=manager.list()
     processes=[]
@@ -103,19 +109,19 @@ if __name__=="__main__":
     n=int(input())
     print("Which size?")
     k=int(input())
-    chosen_algo=None
-    while chosen_algo is None:
+    chosen_algorithm=None
+    while chosen_algorithm is None:
         print("Which algorithm : ")
         print("1. BFS")
         print("2. DFS")
         print("3. A*")
         print("4. BFS (NO LOOP)")
         print("5. DFS (NO LOOP)")
-        chosen_algo=algorithm.convert_input_to_algo(int(input()))
+        chosen_algorithm=algorithm.convert_input_to_algo(int(input()))
 
     if n>1:
         n_threads=int(os.cpu_count()/3)
         run_multiprocess()
     else:
-        print(chosen_algo(Taquin(k)))
+        print(chosen_algorithm(Taquin(k)))
 
