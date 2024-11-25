@@ -92,7 +92,7 @@ def run_multiprocess():
     portion,rest=divmod(n,n_threads)
     for i in range(n_threads):
         portion_to_use=portion+rest if i == 0 else portion
-        p=multiprocessing.Process(target=test,args=(chosen_algo,k,portion_to_use,result))
+        p=multiprocessing.Process(target=test,args=(chosen_algorithm,k,portion_to_use,result))
         p.start()
         processes.append(p)
     for p in processes:
@@ -123,5 +123,6 @@ if __name__=="__main__":
         n_threads=int(os.cpu_count()/3)
         run_multiprocess()
     else:
+        result=[]
         print(chosen_algorithm(Taquin(k)))
 
