@@ -71,7 +71,7 @@ class Taquin :
 
         return next_states
 
-def test(algorithm,k,n,result):
+def test(algorithm,k,n,result,queue):
     """Start n test of k*k taquin using algorithm"""
     total_time=0
     for _ in range(n):
@@ -81,27 +81,34 @@ def test(algorithm,k,n,result):
         end_time=time.time()
         elapsed_time=end_time-start_time
         total_time+=elapsed_time
+        queue.put(1)
     result.append(total_time)
     
 
 def run_multiprocess():
     """Run multiple processes to solve multiple taquin"""
+    queue=multiprocessing.Queue()
     manager=multiprocessing.Manager()
     result=manager.list()
     processes=[]
     portion,rest=divmod(n,n_threads)
     for i in range(n_threads):
         portion_to_use=portion+rest if i == 0 else portion
-        p=multiprocessing.Process(target=test,args=(chosen_algorithm,k,portion_to_use,result))
+        p=multiprocessing.Process(target=test,args=(chosen_algorithm,k,portion_to_use,result,queue))
         p.start()
         processes.append(p)
+        
+    total_done=0
+    while total_done<n:
+        queue.get()
+        total_done += 1
+        print(total_done)
+
     for p in processes:
         p.join()
     total_time = sum(result)
     avg_time = total_time / float(n)
     print(f"Average elapsed time to solve: {avg_time:.6f} seconds")
-
-
 
 
 if __name__=="__main__":
