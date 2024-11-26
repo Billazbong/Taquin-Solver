@@ -3,7 +3,7 @@ import random
 import time
 import algorithm
 import multiprocessing
-
+import copy
 class Taquin :
     directions=[(-1,0),(1,0),(0,-1),(0,1)]
 
@@ -123,11 +123,9 @@ if __name__=="__main__":
         print("4. BFS (NO LOOP)")
         print("5. DFS (NO LOOP)")
         chosen_algorithm=algorithm.convert_input_to_algo(int(input()))
-
     if n>1:
         n_threads=int(os.cpu_count()/3)
         run_multiprocess()
     else:
-        result=[]
         print(chosen_algorithm(Taquin(k)))
 
