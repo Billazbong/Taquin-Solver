@@ -1,7 +1,5 @@
-import sys
 import os
 import random
-import tkinter
 import time
 import algorithm
 import multiprocessing
@@ -97,7 +95,7 @@ def run_multiprocess():
         p=multiprocessing.Process(target=test,args=(chosen_algorithm,k,portion_to_use,result,queue))
         p.start()
         processes.append(p)
-        
+
     total_done=0
     while total_done<n:
         queue.get()
