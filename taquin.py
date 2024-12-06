@@ -3,7 +3,7 @@ import random
 import time
 import algorithm
 import multiprocessing
-import copy
+
 class Taquin :
     directions=[(-1,0),(1,0),(0,-1),(0,1)]
 
